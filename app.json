@@ -1,5 +1,12 @@
 {
   "name": "IoT intercom server app",
+  "env": {
+    "APP_CLIENT_ID": "",
+    "APP_CLIENT_SECRET": "",
+    "SALESFORCE_USERNAME": "",
+    "SALESFORCE_PASSWORD": "",
+    "EINSTEIN_MODEL_ID": "GeneralImageClassifier"   
+  },
   "description": "A Node.js IoT intercom app using Einstein Vision",
   "repository": "https://github.com/misu007/iot-intercom-with-einstein-vision-example-heroku",
   "logo": "https://node-js-sample.herokuapp.com/node.png",
