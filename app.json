@@ -17,6 +17,5 @@
   ],
   "description": "A Node.js IoT intercom app using Einstein Vision",
   "repository": "https://github.com/misu007/iot-intercom-with-einstein-vision-example-heroku",
-  "logo": "https://node-js-sample.herokuapp.com/node.png",
   "keywords": ["node", "einstein", "vision", "image", "raspberrypi"]
 }
