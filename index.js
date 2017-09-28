@@ -11,7 +11,6 @@ var req = require('request');
 var qs = require('querystring');
 var ProductionDomain = 'https://login.salesforce.com';
 var loginURL = '/services/oauth2/token';
-var revokeURL = '/services/oauth2/revoke?token=';
 var clientId = process.env.APP_CLIENT_ID;
 var clientSecret = process.env.APP_CLIENT_SECRET;
 var version = 'v40.0';
@@ -21,7 +20,6 @@ var accountid = process.env.EINSTEIN_VISION_ACCOUNT_ID;
 var pky = process.env.EINSTEIN_VISION_PRIVATE_KEY;
 var sfdc_username = process.env.SALESFORCE_USERNAME;
 var sfdc_password = process.env.SALESFORCE_PASSWORD;
-
 
 app.use(sslRedirect());
 app.use(express.static(__dirname + '/public'));
