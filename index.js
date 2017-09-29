@@ -29,78 +29,44 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.post('/img', function(req, res) {
 	try{
-		var b64 = req.body.b64;
-		var mode = req.body.mode;
-		var predictionResult;
-		if (mode == 'p'){
-		async.waterfall([
-			function(callback){
-				// Einstein Vision API: アクセストークン取得
-				
-				loginEinsteinVision(callback);
-			},
-			function(obj, callback){
-				// Einstein Vision API: 予測実行
-				predictImage(obj, b64, callback);
-			},
-			function(obj, callback){
-				// インターホン呼機(Raspberry Pi)に予測結果をレスポンス
-				res.send(obj);
-				// Salesforce REST API: アクセストークン取得
-				predictionResult = obj;
-				loginSalesforce(callback);
-			},
-			function(obj, callback){
-				// Salesforce REST API: プラットフォームイベントをパブリッシュ
-				publishPlatformEvent(obj, predictionResult, callback);
-			},
-			function(callback){
-				// イメージファイルを書き込み
-				fs.writeFile("public/camera.jpg", b64, 'base64', function(err){
-					if(err){
-						callback(err);
-					} else {
-						callback(null);
-					}
-				});	
+	    var b64 = req.body.b64;
+	    var predictionResult;
+	    async.waterfall([
+		function(callback){
+		    // Einstein Vision API: アクセストークン取得
+		    
+		    loginEinsteinVision(callback);
+		},
+		function(obj, callback){
+		    // Einstein Vision API: 予測実行
+		    predictImage(obj, b64, callback);
+		},
+		function(obj, callback){
+		    // インターホン呼機(Raspberry Pi)に予測結果をレスポンス
+		    res.send(obj);
+		    // Salesforce REST API: アクセストークン取得
+		    predictionResult = obj;
+		    loginSalesforce(callback);
+		},
+		function(obj, callback){
+		    // Salesforce REST API: プラットフォームイベントをパブリッシュ
+		    publishPlatformEvent(obj, predictionResult, callback);
+		},
+		function(callback){
+		    // イメージファイルを書き込み
+		    fs.writeFile("public/camera.jpg", b64, 'base64', function(err){
+			if(err){
+			    callback(err);
+			} else {
+			    callback(null);
 			}
-			], function (err, result){
-			});
-		} else {
-			async.waterfall([
-			function(callback){
-				var obj = 
-				mode == 'sugahara' ? '{"probabilities":[{"label":"sugahara","probability":0.8930666},{"label":"inaba","probability":0.10693335}]}':
-				'{"probabilities":[{"label":"inaba","probability":0.94703066},{"label":"sugahara","probability":0.05296937}]}';
-				callback(null, obj);
-			},			
-			function(obj, callback){
-				// インターホン呼機(Raspberry Pi)に予測結果をレスポンス
-				res.send(obj);
-				// Salesforce REST API: アクセストークン取得
-				predictionResult = obj;
-				loginSalesforce(callback);
-			},
-			function(obj, callback){
-				// Salesforce REST API: プラットフォームイベントをパブリッシュ
-				publishPlatformEvent(obj, predictionResult, callback);
-			},
-			function(callback){
-				// イメージファイルを書き込み
-				fs.writeFile("public/camera.jpg", b64, 'base64', function(err){
-					if(err){
-						callback(err);
-					} else {
-						callback(null);
-					}
-				});	
-			}
-			], function (err, result){
-			});
-
-		}	
+		    });	
+		}
+	    ], function (err, result){
+	    });
+            
 	} catch(error){
-		console.log(error);
+	    console.log(error);
 	}
 });
 function publishPlatformEvent(obj, predictionResult, callback){
@@ -152,7 +118,7 @@ function loginEinsteinVision(callback){
 			alg: "RS256",
 			typ: "JWT"
 		},
-		expiresIn: '2m'
+		expiresIn: '3m'
 	});
 	req.post({
 		url: authURI,
